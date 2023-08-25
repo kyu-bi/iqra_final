@@ -9,9 +9,12 @@ import 'package:iqra_app/data/models/detailhijaiyah.dart' as detail;
 class DetailHuruf extends StatelessWidget {
   int id;
   DetailHuruf({super.key, required this.id});
-
+  DetailHijaiyahController detailC = DetailHijaiyahController();
   @override
   Widget build(BuildContext context) {
+    double widthDevice = MediaQuery.of(context).size.width;
+    double heightDevice = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Color(0xffF0F0F0),
       appBar: AppBar(
@@ -28,11 +31,7 @@ class DetailHuruf extends StatelessWidget {
               future: detailHijaiyahC.getDetailHijaiyah(id.toString()),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: bluegrey,
-                    ),
-                  );
+                  return Center(child: detailC.Loading());
                 }
                 if (!snapshot.hasData) {
                   return const Center(
@@ -42,120 +41,89 @@ class DetailHuruf extends StatelessWidget {
                 detail.DetailHijaiyah detailHijaiyah = snapshot.data!;
                 List<detail.Harkat> harkats = detailHijaiyah.harkats;
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 20),
-                    Container(
-                      width: 350,
-                      height: 150,
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade500,
-                              blurRadius: 9.5,
-                            )
-                          ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          // Positioned(
-                          //   bottom: 0,
-                          //   child: Opacity(
-                          //     opacity: 0.5,
-                          //     child: Image.asset(
-
-                          //       "assets/img/detail1.png",
-                          //       width: 100,
-                          //       fit: BoxFit.contain,
-                          //     ),
-                          //   ),
-                          // ),
-                          if (detailHijaiyahC.selectedHarkatIndex != -1)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                      Container(
+                        width: widthDevice * 0.95,
+                        height: heightDevice * 0.28,
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade500,
+                                blurRadius: 9.5,
+                              )
+                            ],
+                            color: bluegrey,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Column(
                               children: [
-                                Container(
-                                  width: 150,
-                                  height: 130,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              "assets/img/huruf1.png"))),
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Text(
-                                        "${harkats[detailHijaiyahC.selectedHarkatIndex].tulisan_latin}",
-                                        style: const TextStyle(
-                                            fontSize: 30,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ],
-                                  ),
+                                Text(
+                                  "${harkats[detailHijaiyahC.selectedHarkatIndex].tulisan_arab}",
+                                  style: const TextStyle(
+                                      fontSize: 65,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700),
                                 ),
-                                Container(
-                                  width: 150,
-                                  height: 130,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              "assets/img/huruf1.png"))),
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Text(
-                                        "${harkats[detailHijaiyahC.selectedHarkatIndex].tulisan_arab}",
-                                        style: const TextStyle(
-                                            fontSize: 50,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ],
-                                  ),
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/img/as.png',
+                                      width: widthDevice * 0.5,
+                                    ),
+                                    Text(
+                                      "${harkats[detailHijaiyahC.selectedHarkatIndex].tulisan_latin}",
+                                      style: const TextStyle(
+                                          fontSize: 30,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ],
                                 ),
                               ],
-                            ),
-                        ],
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(23),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: harkats.asMap().entries.map((entry) {
-                          int index = entry.key;
-                          detail.Harkat harkat = entry.value;
+                      Padding(
+                        padding: const EdgeInsets.all(23),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: harkats.asMap().entries.map((entry) {
+                            int index = entry.key;
+                            detail.Harkat harkat = entry.value;
 
-                          return ElevatedButton(
-                            onPressed: () {
-                              detailHijaiyahC.selectHarkat(index);
-                              // detailHijaiyahC.playAudio(harkat.audio);
-                            },
-                            child: Text(
-                              "${harkat.harkat}",
-                              style: TextStyle(
-                                color:
-                                    detailHijaiyahC.selectedHarkatIndex == index
-                                        ? Colors.black
-                                        : Colors.white,
+                            return ElevatedButton(
+                              onPressed: () {
+                                detailHijaiyahC.selectHarkat(index);
+                                // detailHijaiyahC.playAudio(harkat.audio);
+                              },
+                              child: Text(
+                                "${harkat.harkat}",
+                                style: TextStyle(
+                                  color: detailHijaiyahC.selectedHarkatIndex ==
+                                          index
+                                      ? Colors.black
+                                      : Colors.white,
+                                ),
                               ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  detailHijaiyahC.selectedHarkatIndex == index
-                                      ? Colors.white
-                                      : bluegrey,
-                            ),
-                          );
-                        }).toList(),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    detailHijaiyahC.selectedHarkatIndex == index
+                                        ? Colors.white
+                                        : bluegrey,
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: Container(
+                      Container(
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             boxShadow: [
@@ -207,9 +175,7 @@ class DetailHuruf extends StatelessWidget {
                               IconButton(
                                 onPressed: () {
                                   detailHijaiyahC.playAudio(
-                                      "https://ba6b-103-190-47-99.ngrok-free.app${harkats[detailHijaiyahC.selectedHarkatIndex].audio}");
-                                  print(
-                                      "https://ba6b-103-190-47-99.ngrok-free.app${harkats[detailHijaiyahC.selectedHarkatIndex].audio}");
+                                      "https://81fa-140-213-127-31.ngrok-free.app/${harkats[detailHijaiyahC.selectedHarkatIndex].audio}");
                                 },
                                 icon: const Icon(
                                   Icons.play_circle,
@@ -223,13 +189,14 @@ class DetailHuruf extends StatelessWidget {
                                   color: Colors.white,
                                   fontSize: 16,
                                 ),
-                              )
+                              ),
+                              SizedBox(height: heightDevice * 0.1)
                             ],
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               },
             );

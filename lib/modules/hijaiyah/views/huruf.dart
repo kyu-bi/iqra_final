@@ -12,6 +12,9 @@ class HurufHijaiyah extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double widthDevice = MediaQuery.of(context).size.width;
+    double heightDevice = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Daftar Huruf"),
@@ -24,8 +27,8 @@ class HurufHijaiyah extends StatelessWidget {
         children: [
           const SizedBox(height: 40),
           Container(
-            width: 360,
-            height: 150,
+            width: widthDevice * 0.95,
+            height: heightDevice * 0.28,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               gradient: const LinearGradient(
@@ -102,7 +105,7 @@ class HurufHijaiyah extends StatelessWidget {
           const SizedBox(height: 40),
           Expanded(
             child: Container(
-              width: MediaQuery.of(context).size.width,
+              width: widthDevice,
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
@@ -123,8 +126,8 @@ class HurufHijaiyah extends StatelessWidget {
                     future: hijaiyahC.getAllItem(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
+                        return Center(
+                          child: hijaiyahC.Loading(),
                         );
                       }
                       //jika tidak punya data
@@ -139,7 +142,7 @@ class HurufHijaiyah extends StatelessWidget {
                             shrinkWrap: false,
                             gridDelegate:
                                 const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 100,
+                              maxCrossAxisExtent: 156,
                               childAspectRatio: 1 / 1,
                               crossAxisSpacing: 20,
                               mainAxisSpacing: 20,
@@ -155,18 +158,9 @@ class HurufHijaiyah extends StatelessWidget {
                                 ),
                                 child: Stack(
                                   children: [
-                                    //  ha = snapshot.data,
-                                    Container(
-                                      width: 300,
-                                      height: 300,
-                                      decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                              "assets/img/huruf1.png"),
-                                        ),
-                                      ),
+                                    Image.asset(
+                                      'assets/img/huruf1.png',
                                     ),
-
                                     Center(
                                       child: Column(
                                         mainAxisAlignment:

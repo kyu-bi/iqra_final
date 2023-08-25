@@ -3,6 +3,7 @@ import 'package:iqra_app/constant/font_color.dart';
 // import 'package:iqra_app/data/models/detailhijaiyah.dart';
 // import 'package:iqra_app/modules/detailhijaiyah/views/detail_huruf.dart';
 import 'package:iqra_app/modules/hijaiyah/views/huruf.dart';
+import 'package:iqra_app/modules/splashscreen.dart';
 // import 'package:iqra_app/modules/hijaiyah/views/huruf.dart';
 // import 'package:iqra_app/modules/splashscreen.dart';
 
@@ -18,7 +19,7 @@ class IqraApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: font,
-      home: HurufHijaiyah(),
+      home: SplashScreen(),
     );
   }
 }
